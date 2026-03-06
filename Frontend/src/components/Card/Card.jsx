@@ -6,7 +6,7 @@ const Card = ({ imgUrl, discription, ratings, price }) => {
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
       <Link to="#">
         <img
-          className="p-5 rounded-t-lg h-68 w-full object-cover"
+          className="p-5 rounded-t-lg h-64 w-full object-cover"
           src={imgUrl}
           alt="product image"
         />

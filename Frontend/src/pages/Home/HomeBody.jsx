@@ -3,7 +3,7 @@ import Card from '../../components/Card/Card';
 
 const HomeBody = () => {
   return (
-    <div className="w-max grid grid-rows-4 grid-cols-3 px-20 m-15 gap-8 justify-center overflow-hidden">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-6 py-10">
       <Card 
         imgUrl="https://images.meesho.com/images/products/440972832/uo4fs_512.jpg" 
         discription="One Piece is Real"

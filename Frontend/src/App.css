@@ -3,3 +3,8 @@
 *{
   font-family: Poppins;
 }
+
+body {
+  background-color: #e5e2de;
+  min-height: 100vh;
+}

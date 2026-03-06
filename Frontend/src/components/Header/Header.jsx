@@ -21,12 +21,12 @@ const Header = () => {
 
     
   return (
-    <header className="bg-white">
+    <header className="bg-transparent">
   <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
     <div className="flex lg:flex-1">
       <Link to="/" className="-m-1.5 p-1.5">
-        <span className="sr-only">Saiyaraa</span>
-        <img src={FullLogo} alt="" className="h-30 w-auto" />
+        <span className="sr-only">CRAG</span>
+        <img src={FullLogo} alt="" className="h-15 w-auto" />
       </Link >
     </div>
     <div className="flex lg:hidden">
