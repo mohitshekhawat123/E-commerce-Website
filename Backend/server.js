@@ -2,7 +2,7 @@ import express from "express";
 import { connect } from "mongoose";
 import { config } from "dotenv";
 import cors from "cors";
-import bodyParser  from "body-parser";
+import bodyParser from "body-parser";
 
 import authRoutes from "./routes/auth.js";
 
@@ -23,10 +23,7 @@ app.get("/", (req, res) => {
 });
 
 // Connect to MongoDB Atlas
-connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
     app.listen(PORT, () => {
