@@ -1,0 +1,19 @@
+﻿
+> e-commerce@0.0.0 lint
+> eslint .
+
+
+D:\Work\Work\Side_Projects\E-Commerce Full Stack\Frontend\src\Auth\Login.jsx
+  4:19  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\Work\Work\Side_Projects\E-Commerce Full Stack\Frontend\src\Auth\Register.jsx
+  5:19  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\Work\Work\Side_Projects\E-Commerce Full Stack\Frontend\src\components\ui\button.jsx
+  60:18  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\Work\Work\Side_Projects\E-Commerce Full Stack\Frontend\src\components\ui\navigation-menu.jsx
+  151:3  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+Γ£û 4 problems (4 errors, 0 warnings)
+

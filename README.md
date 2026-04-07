@@ -30,3 +30,13 @@ We're upgrading this project to production quality. Here's the roadmap — tackl
 - [ ] Payment gateway integration
 - [ ] Responsive mobile design
 - [ ] Performance optimization & SEO
+
+
+
+### Planned (Todo)
+-[ ] Make shop by category responsive
+-[ ] Scrape real data with proper descriptions and images
+-[ ] Make the load more button functional
+
+
+

@@ -5,6 +5,9 @@ import cors from "cors";
 import bodyParser from "body-parser";
 
 import authRoutes from "./routes/auth.js";
+import cartRoutes from "./routes/cart.js";
+import wishlistRoutes from "./routes/wishlist.js";
+import productRoutes from "./routes/productRoutes.js";
 
 config();
 
@@ -17,6 +20,9 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/products", productRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");

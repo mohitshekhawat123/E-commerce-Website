@@ -12,7 +12,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  
+
+  cart: [
+    {
+      productId: { type: String, required: true },
+      quantity: { type: Number, required: true, default: 1 },
+      attributes: { type: Object, default: {} }
+    }
+  ],
+
+  wishlist: [
+    {
+      productId: { type: String, required: true }
+    }
+  ],
 
   createdAt: {
     type: Date,
