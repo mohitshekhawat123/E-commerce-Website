@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { MOCK_PRODUCTS } from '../data/mockProducts';
+import customFetch from '../utils/api';
 
 const WishlistContext = createContext();
 
@@ -9,17 +10,11 @@ export const WishlistProvider = ({ children }) => {
     const [wishlistItems, setWishlistItems] = useState([]);
     const [toastState, setToastState] = useState({ visible: false, message: "" });
 
-    const getToken = () => localStorage.getItem("token");
-
     // Rehydrate Wishlist globally against Express
     useEffect(() => {
         const fetchWishlist = async () => {
-            const token = getToken();
-            if (!token) return;
             try {
-                const res = await fetch("http://localhost:5000/api/wishlist", {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
+                const res = await customFetch("/wishlist")
                 if (res.ok) {
                     const data = await res.json()
                     if (data.wishlist) {
@@ -46,19 +41,18 @@ export const WishlistProvider = ({ children }) => {
 
     const toggleWishlist = async (product) => {
         const exists = isInWishlist(product.id);
-        const token = getToken();
 
         if (exists) {
             setWishlistItems(prev => prev.filter(item => item.id !== product.id));
             showToast(`Removed ${product.name} from wishlist.`);
-            if (token) fetch(`http://localhost:5000/api/wishlist/remove/${product.id}`, {
-                method: "DELETE", headers: { Authorization: `Bearer ${token}` }
+            customFetch(`/wishlist/remove/${product.id}`, {
+                method: "DELETE"
             }).catch(console.error)
         } else {
             setWishlistItems(prev => [...prev, product]);
             showToast(`Added ${product.name} to wishlist.`);
-            if (token) fetch(`http://localhost:5000/api/wishlist/add`, {
-                method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            customFetch(`/wishlist/add`, {
+                method: "POST", 
                 body: JSON.stringify({ productId: String(product.id) })
             }).catch(console.error)
         }
@@ -73,13 +67,10 @@ export const WishlistProvider = ({ children }) => {
         showToast(`Moved ${product.name} to wishlist.`);
 
         if (!skipSync) {
-            const token = getToken();
-            if (token) {
-                fetch(`http://localhost:5000/api/wishlist/add`, {
-                    method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                    body: JSON.stringify({ productId: String(product.id) })
-                }).catch(console.error)
-            }
+            customFetch(`/wishlist/add`, {
+                method: "POST",
+                body: JSON.stringify({ productId: String(product.id) })
+            }).catch(console.error)
         }
         return true;
     };
@@ -88,9 +79,8 @@ export const WishlistProvider = ({ children }) => {
         setWishlistItems(prev => prev.filter(item => item.id !== productId));
         if (productName) showToast(`Removed ${productName} from wishlist.`);
 
-        const token = getToken();
-        if (token) fetch(`http://localhost:5000/api/wishlist/remove/${productId}`, {
-            method: "DELETE", headers: { Authorization: `Bearer ${token}` }
+        customFetch(`/wishlist/remove/${productId}`, {
+            method: "DELETE"
         }).catch(console.error)
     };
 

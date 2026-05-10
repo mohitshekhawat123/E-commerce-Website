@@ -47,14 +47,64 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
     });
 
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    // Set cookies
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    };
+
+    res.cookie("token", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 }); // 15 mins
+    res.cookie("refreshToken", refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 }); // 7 days
+
     console.log("✅ Login successful");
-    res.status(200).json({ token });
+    res.status(200).json({ message: "Login successful", user: { id: user._id, email: user.email } });
   } catch (err) {
     console.error("❌ Login error:", err.message);
     res.status(500).json({ error: "Server error during login" });
   }
+};
+
+// Refresh Token controller
+export const refreshToken = async (req, res) => {
+  const incomingRefreshToken = req.cookies.refreshToken;
+
+  if (!incomingRefreshToken) {
+    return res.status(401).json({ error: "No refresh token provided." });
+  }
+
+  try {
+    const decoded = jwt.verify(incomingRefreshToken, process.env.JWT_SECRET);
+    
+    // Issue a new access token
+    const newAccessToken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    };
+
+    res.cookie("token", newAccessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 }); // 15 mins
+    res.status(200).json({ message: "Token refreshed successfully" });
+  } catch (err) {
+    return res.status(403).json({ error: "Invalid or expired refresh token." });
+  }
+};
+
+// Logout controller
+export const logoutUser = async (req, res) => {
+  res.clearCookie("token");
+  res.clearCookie("refreshToken");
+  res.status(200).json({ message: "Logged out successfully" });
 };

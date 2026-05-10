@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { MOCK_PRODUCTS } from '../data/mockProducts'
+import customFetch from '../utils/api'
 
 const CartContext = createContext()
 
@@ -9,18 +10,11 @@ export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([])
     const [toastState, setToastState] = useState({ visible: false, message: "" })
 
-    // JWT Token extractor
-    const getToken = () => localStorage.getItem("token")
-
     // Rehydrate state directly from Express via Mongoose
     useEffect(() => {
         const fetchCart = async () => {
-            const token = getToken();
-            if (!token) return;
             try {
-                const res = await fetch("http://localhost:5000/api/cart", {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
+                const res = await customFetch("/cart")
                 if (res.ok) {
                     const data = await res.json()
                     if (data.cart) {
@@ -65,14 +59,10 @@ export const CartProvider = ({ children }) => {
         showToast(`Added ${product.name} to cart.`)
 
         if (!skipSync) {
-            const token = getToken();
-            if (token) {
-                await fetch("http://localhost:5000/api/cart/add", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                    body: JSON.stringify({ productId: String(product.id), quantity, attributes })
-                }).catch(e => console.error("Error syncing cart", e))
-            }
+            await customFetch("/cart/add", {
+                method: "POST",
+                body: JSON.stringify({ productId: String(product.id), quantity, attributes })
+            }).catch(e => console.error("Error syncing cart", e))
         }
     }
 
@@ -83,13 +73,9 @@ export const CartProvider = ({ children }) => {
         })
 
         if (!skipSync) {
-            const token = getToken();
-            if (token) {
-                await fetch(`http://localhost:5000/api/cart/remove/${product.id}`, {
-                    method: "DELETE",
-                    headers: { Authorization: `Bearer ${token}` }
-                }).catch(e => console.error("Error syncing cart removal", e))
-            }
+            await customFetch(`/cart/remove/${product.id}`, {
+                method: "DELETE"
+            }).catch(e => console.error("Error syncing cart removal", e))
         }
     }
 
@@ -105,14 +91,10 @@ export const CartProvider = ({ children }) => {
             })
         })
 
-        const token = getToken();
-        if (token) {
-            await fetch("http://localhost:5000/api/cart/update", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ productId: String(product.id), quantity: newQty, attributes })
-            }).catch(e => console.error("Error updating qty", e))
-        }
+        await customFetch("/cart/update", {
+            method: "PUT",
+            body: JSON.stringify({ productId: String(product.id), quantity: newQty, attributes })
+        }).catch(e => console.error("Error updating qty", e))
     }
 
     const clearCart = () => setCartItems([])
