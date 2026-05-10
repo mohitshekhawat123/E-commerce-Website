@@ -14,7 +14,7 @@ export const WishlistProvider = ({ children }) => {
     useEffect(() => {
         const fetchWishlist = async () => {
             try {
-                const res = await customFetch("/wishlist")
+                const res = await customFetch("/api/wishlist")
                 if (res.ok) {
                     const data = await res.json()
                     if (data.wishlist) {
@@ -45,13 +45,13 @@ export const WishlistProvider = ({ children }) => {
         if (exists) {
             setWishlistItems(prev => prev.filter(item => item.id !== product.id));
             showToast(`Removed ${product.name} from wishlist.`);
-            customFetch(`/wishlist/remove/${product.id}`, {
+            customFetch(`/api/wishlist/remove/${product.id}`, {
                 method: "DELETE"
             }).catch(console.error)
         } else {
             setWishlistItems(prev => [...prev, product]);
             showToast(`Added ${product.name} to wishlist.`);
-            customFetch(`/wishlist/add`, {
+            customFetch(`/api/wishlist/add`, {
                 method: "POST", 
                 body: JSON.stringify({ productId: String(product.id) })
             }).catch(console.error)
@@ -67,7 +67,7 @@ export const WishlistProvider = ({ children }) => {
         showToast(`Moved ${product.name} to wishlist.`);
 
         if (!skipSync) {
-            customFetch(`/wishlist/add`, {
+            customFetch(`/api/wishlist/add`, {
                 method: "POST",
                 body: JSON.stringify({ productId: String(product.id) })
             }).catch(console.error)
@@ -79,7 +79,7 @@ export const WishlistProvider = ({ children }) => {
         setWishlistItems(prev => prev.filter(item => item.id !== productId));
         if (productName) showToast(`Removed ${productName} from wishlist.`);
 
-        customFetch(`/wishlist/remove/${productId}`, {
+        customFetch(`/api/wishlist/remove/${productId}`, {
             method: "DELETE"
         }).catch(console.error)
     };

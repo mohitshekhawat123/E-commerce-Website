@@ -26,7 +26,7 @@ const Register = () => {
     }
 
     try {
-      const res = await customFetch("/auth/register", {
+      const res = await customFetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });

@@ -1,4 +1,4 @@
-export const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+export const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const customFetch = async (endpoint, options = {}) => {
   // If the endpoint is already a full URL, use it directly, else prepend BASE_URL
@@ -19,7 +19,7 @@ const customFetch = async (endpoint, options = {}) => {
 
     // If unauthorized (token expired), try refreshing the token
     if (response.status === 401) {
-      const refreshResponse = await fetch(`${BASE_URL}/auth/refresh`, {
+      const refreshResponse = await fetch(`${BASE_URL}/api/auth/refresh`, {
         method: "POST",
         credentials: "include",
       });
@@ -29,7 +29,7 @@ const customFetch = async (endpoint, options = {}) => {
         response = await fetch(url, config);
       } else {
         // Refresh failed, logout user
-        await fetch(`${BASE_URL}/auth/logout`, {
+        await fetch(`${BASE_URL}/api/auth/logout`, {
           method: "POST",
           credentials: "include",
         });

@@ -12,7 +12,7 @@ const CartItem = ({ item, onUpdateQty, onRemove }) => {
     const isWished = isInWishlist(item.id);
 
     const handleMoveToWishlist = () => {
-        customFetch("/cart/move-to-wishlist", {
+        customFetch("/api/cart/move-to-wishlist", {
             method: "POST",
             body: JSON.stringify({ productId: String(item.id) })
         }).catch(console.error);

@@ -14,7 +14,7 @@ export const CartProvider = ({ children }) => {
     useEffect(() => {
         const fetchCart = async () => {
             try {
-                const res = await customFetch("/cart")
+                const res = await customFetch("/api/cart")
                 if (res.ok) {
                     const data = await res.json()
                     if (data.cart) {
@@ -59,7 +59,7 @@ export const CartProvider = ({ children }) => {
         showToast(`Added ${product.name} to cart.`)
 
         if (!skipSync) {
-            await customFetch("/cart/add", {
+            await customFetch("/api/cart/add", {
                 method: "POST",
                 body: JSON.stringify({ productId: String(product.id), quantity, attributes })
             }).catch(e => console.error("Error syncing cart", e))
@@ -73,7 +73,7 @@ export const CartProvider = ({ children }) => {
         })
 
         if (!skipSync) {
-            await customFetch(`/cart/remove/${product.id}`, {
+            await customFetch(`/api/cart/remove/${product.id}`, {
                 method: "DELETE"
             }).catch(e => console.error("Error syncing cart removal", e))
         }
@@ -91,7 +91,7 @@ export const CartProvider = ({ children }) => {
             })
         })
 
-        await customFetch("/cart/update", {
+        await customFetch("/api/cart/update", {
             method: "PUT",
             body: JSON.stringify({ productId: String(product.id), quantity: newQty, attributes })
         }).catch(e => console.error("Error updating qty", e))

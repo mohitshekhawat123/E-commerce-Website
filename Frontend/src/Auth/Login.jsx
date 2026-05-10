@@ -18,7 +18,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await customFetch("/auth/login", {
+      const res = await customFetch("/api/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });

@@ -17,7 +17,7 @@ export default function ProductListing() {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const response = await customFetch(`/products?category=${category}&subcategory=${subcategory}`);
+        const response = await customFetch(`/api/products?category=${category}&subcategory=${subcategory}`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
