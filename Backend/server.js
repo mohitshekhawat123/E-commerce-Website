@@ -15,13 +15,18 @@ config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://e-commerce-website-78wa.vercel.app"
+];
+
 // Middleware
-app.use(cors({ 
-  origin: process.env.CLIENT_URL || "http://localhost:5173", 
-  credentials: true 
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
 }));
+app.use(express.json());
 app.use(cookieParser());
-app.use(bodyParser.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
