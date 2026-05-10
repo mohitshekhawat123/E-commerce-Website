@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useWishlist } from '../../context/WishlistContext'
 import { useCart } from '../../context/CartContext'
+import customFetch from '../../utils/api'
 
 const CartItem = ({ item, onUpdateQty, onRemove }) => {
     const { addToWishlist, isInWishlist } = useWishlist();
@@ -11,14 +12,10 @@ const CartItem = ({ item, onUpdateQty, onRemove }) => {
     const isWished = isInWishlist(item.id);
 
     const handleMoveToWishlist = () => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            fetch("http://localhost:5000/api/cart/move-to-wishlist", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ productId: String(item.id) })
-            }).catch(console.error);
-        }
+        customFetch("/cart/move-to-wishlist", {
+            method: "POST",
+            body: JSON.stringify({ productId: String(item.id) })
+        }).catch(console.error);
 
         const added = addToWishlist(item, true); // skipSync = true
         if (added) {

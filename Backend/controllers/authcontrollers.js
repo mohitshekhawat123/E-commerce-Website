@@ -55,11 +55,11 @@ export const loginUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    // Set cookies
+    // Set cookies for cross-domain usage (Vercel to Render)
     const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     };
 
     res.cookie("token", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 }); // 15 mins
@@ -92,7 +92,7 @@ export const refreshToken = async (req, res) => {
     const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     };
 
     res.cookie("token", newAccessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 }); // 15 mins
@@ -104,7 +104,13 @@ export const refreshToken = async (req, res) => {
 
 // Logout controller
 export const logoutUser = async (req, res) => {
-  res.clearCookie("token");
-  res.clearCookie("refreshToken");
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  };
+
+  res.clearCookie("token", cookieOptions);
+  res.clearCookie("refreshToken", cookieOptions);
   res.status(200).json({ message: "Logged out successfully" });
 };
