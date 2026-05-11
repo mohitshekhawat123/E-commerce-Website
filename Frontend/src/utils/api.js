@@ -18,7 +18,10 @@ const customFetch = async (endpoint, options = {}) => {
     let response = await fetch(url, config);
 
     // If unauthorized (token expired), try refreshing the token
-    if (response.status === 401) {
+    // Do NOT intercept 401s for login or refresh endpoints to avoid loops
+    const isAuthEndpoint = endpoint.includes('/auth/login') || endpoint.includes('/auth/refresh') || endpoint.includes('/auth/register');
+
+    if (response.status === 401 && !isAuthEndpoint) {
       const refreshResponse = await fetch(`${BASE_URL}/api/auth/refresh`, {
         method: "POST",
         credentials: "include",
@@ -33,7 +36,12 @@ const customFetch = async (endpoint, options = {}) => {
           method: "POST",
           credentials: "include",
         });
-        window.location.href = "/login"; // Redirect to login
+        
+        // Prevent infinite redirect loops if already on auth pages
+        const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/register';
+        if (!isAuthPage) {
+          window.location.href = "/login"; // Redirect to login
+        }
         throw new Error("Session expired. Please log in again.");
       }
     }
