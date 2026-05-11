@@ -4,6 +4,13 @@ const customFetch = async (endpoint, options = {}) => {
   // If the endpoint is already a full URL, use it directly, else prepend BASE_URL
   const url = endpoint.startsWith("http") ? endpoint : `${BASE_URL}${endpoint}`;
 
+  console.log("=== API DEBUG LOG ===");
+  console.log("Raw VITE_API_URL:", import.meta.env.VITE_API_URL);
+  console.log("Resolved BASE_URL:", BASE_URL);
+  console.log("Target Endpoint:", endpoint);
+  console.log("Full Request URL:", url);
+  console.log("=====================");
+
   // Default options for fetch
   const config = {
     ...options,
