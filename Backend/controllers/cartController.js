@@ -2,16 +2,20 @@ import User from "../models/User.js";
 
 export const getCart = async (req, res) => {
     try {
+        console.log("👉 getCart route hit");
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ error: "User not found" });
         res.json({ cart: user.cart });
     } catch (error) {
+        console.log("❌ getCart error:", error);
         res.status(500).json({ error: "Failed to fetch cart" });
     }
 };
 
 export const addToCart = async (req, res) => {
     try {
+        console.log("👉 addToCart route hit");
+        console.log("Body received:", req.body);
         const { productId, quantity = 1, attributes = {} } = req.body;
         const user = await User.findById(req.user.id);
 
@@ -29,6 +33,7 @@ export const addToCart = async (req, res) => {
         await user.save();
         res.json({ cart: user.cart, message: "Item added to cart successfully." });
     } catch (error) {
+        console.log("❌ addToCart error:", error);
         res.status(500).json({ error: "Failed to add to cart" });
     }
 };
@@ -56,6 +61,8 @@ export const updateCartItem = async (req, res) => {
 
 export const removeFromCart = async (req, res) => {
     try {
+        console.log("👉 removeFromCart route hit");
+        console.log("Params received:", req.params);
         const { productId } = req.params;
         const user = await User.findById(req.user.id);
 
@@ -64,6 +71,7 @@ export const removeFromCart = async (req, res) => {
         await user.save();
         res.json({ cart: user.cart, message: "Removed from cart." });
     } catch (error) {
+        console.log("❌ removeFromCart error:", error);
         res.status(500).json({ error: "Failed to remove from cart" });
     }
 };
