@@ -11,7 +11,7 @@ function abc(){
 function App() {
   return (
     <div>
-      abc()
+      
       <RouterProvider router = {router} />
       
     </div>
